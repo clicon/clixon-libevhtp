@@ -1,0 +1,147 @@
+#
+# ***** BEGIN LICENSE BLOCK *****
+# 
+# Copyright (C) 2021 Olof Hagsand 
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# Alternatively, the contents of this file may be used under the terms of
+# the GNU General Public License Version 3 or later (the "GPL"),
+# in which case the provisions of the GPL are applicable instead
+# of those above. If you wish to allow use of your version of this file only
+# under the terms of the GPL, and not to allow others to
+# use your version of this file under the terms of Apache License version 2, 
+# indicate your decision by deleting the provisions above and replace them with
+# the notice and other provisions required by the GPL. If you do not delete
+# the provisions above, a recipient may use your version of this file under
+# the terms of any one of the Apache License version 2 or the GPL.
+#
+# ***** END LICENSE BLOCK *****
+#
+# This makefile supports several restconf web packages in compile-time depending
+# on the value of the with_restconf configure option
+#
+VPATH       	= @srcdir@
+srcdir  	= @srcdir@
+top_srcdir  	= @top_srcdir@
+CC		= @CC@
+CFLAGS  	= @CFLAGS@ 
+LINKAGE         = @LINKAGE@
+INSTALLFLAGS  	= @INSTALLFLAGS@ 
+LDFLAGS 	= @LDFLAGS@
+
+prefix 		= @prefix@
+datarootdir	= @datarootdir@
+exec_prefix 	= @exec_prefix@
+bindir 		= @bindir@
+libdir		= @libdir@
+mandir		= @mandir@
+libexecdir	= @libexecdir@
+localstatedir	= @localstatedir@
+sysconfdir	= @sysconfdir@
+includedir	= @includedir@
+HOST_VENDOR     = @host_vendor@
+
+LIBNAME	        = evhtp
+
+SH_SUFFIX	= @SH_SUFFIX@
+LIB_MAJOR       = @LIB_VERSION_MAJOR@
+LIB_MINOR       = @LIB_VERSION_MINOR@
+
+LIBS          = @LIBS@ 
+
+ifeq ($(LINKAGE),dynamic)
+	CPPFLAGS  	= @CPPFLAGS@ -fPIC
+else
+	CPPFLAGS  	= @CPPFLAGS@
+endif
+
+CPPFLAGS += -DEVHTP_HAS_C99 -DEVHTP_HAS_SYS_TYPES -DEVHTP_DISABLE_REGEX -DEVHTP_DISABLE_EVTHR -DEVHTP_EXPORT=""
+
+INCLUDES	= -I. -I$(top_srcdir)/lib -I$(top_srcdir)/include -I$(top_srcdir) @INCLUDES@
+
+SRC  = 
+SRC += evhtp.c
+SRC += parser.c
+SRC += numtoa.c
+SRC += sslutils.c
+
+OBJ    = $(SRC:.c=.o)
+
+#------------------------
+
+MYLIBDYNAMIC    = lib$(LIBNAME)$(SH_SUFFIX).$(LIB_MAJOR).$(LIB_MINOR)
+MYLIBSO         = lib$(LIBNAME)$(SH_SUFFIX).$(LIB_MAJOR)
+MYLIBLINK       = lib$(LIBNAME)$(SH_SUFFIX)
+MYLIBSTATIC     = lib$(LIBNAME).a
+
+ifeq ($(LINKAGE),dynamic)
+	MYLIB        = $(MYLIBDYNAMIC)
+else
+	MYLIB        = $(MYLIBSTATIC)
+endif
+
+all:	 $(MYLIB)
+
+clean:
+	rm -f $(OBJ) *.core *.o $(MYLIB) $(MYLIBSO) $(MYLIBLINK)
+
+distclean: clean
+	rm -f Makefile *~ .depend
+
+install: $(MYLIB) include/evhtp.h include/evhtp/evhtp.h include/evhtp/parser.h include/evhtp/sslutils.h include/evhtp/config.h
+	install -d -m 0755 $(DESTDIR)$(libdir)
+	install -m 0644 $(INSTALLFLAGS) $(MYLIB) $(DESTDIR)$(libdir)
+ifeq ($(LINKAGE),dynamic)
+	ln -sf $(MYLIB) $(DESTDIR)$(libdir)/$(MYLIBSO)     # -l:libclixon_restconf.so.2
+	ln -sf $(MYLIBSO) $(DESTDIR)$(libdir)/$(MYLIBLINK) # -l:libclixon_restconf.so
+endif
+	install -m 0644 include/evhtp.h $(DESTDIR)$(includedir)
+	install -d -m 0755 $(DESTDIR)$(includedir)/evhtp
+	install -m 0644 include/evhtp/evhtp.h $(DESTDIR)$(includedir)/evhtp
+	install -m 0644 include/evhtp/parser.h $(DESTDIR)$(includedir)/evhtp
+	install -m 0644 include/evhtp/sslutils.h $(DESTDIR)$(includedir)/evhtp
+	install -m 0644 include/evhtp/config.h $(DESTDIR)$(includedir)/evhtp
+
+uninstall:
+	rm -f $(DESTDIR)$(libdir)/$(MYLIBLINK)*
+	rm -f $(DESTDIR)$(includedir)/evhtp.h
+	rm -rf $(DESTDIR)$(includedir)/evhtp
+
+.SUFFIXES:
+.SUFFIXES: .c .o
+
+.c.o:
+	$(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -c $<
+
+$(MYLIBDYNAMIC) : $(OBJ)
+ifeq ($(HOST_VENDOR),apple)
+	$(CC) $(LDFLAGS) -shared -undefined dynamic_lookup -o $@ $^ $(LIBS)
+else
+	$(CC) $(LDFLAGS) -shared -Wl,-soname,$(MYLIBSO) -o $@ $^ $(LIBS) -Wl,-soname=$(MYLIBSO)
+endif
+
+# link-name is needed for application linking, eg for clixon_cli and clixon_config
+$(MYLIBLINK) : $(MYLIB)
+
+$(MYLIBSTATIC) : $(OBJ)
+	ar -crs $@ $<
+
+TAGS:
+	find . -name '*.[ch]' -print | etags -
+
+depend:
+	$(CC) $(DEPENDFLAGS) @DEFS@ $(INCLUDES) $(CFLAGS) -MM $(SRC) > .depend
+
+#include .depend
+

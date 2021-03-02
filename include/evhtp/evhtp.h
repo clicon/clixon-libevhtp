@@ -8,15 +8,8 @@
 #define __EVHTP__H__
 
 /** @file */
-#ifndef EVHTP_DISABLE_EVTHR
-#include <evhtp/thread.h>
-#endif
 
 #include <evhtp/parser.h>
-
-#ifndef EVHTP_DISABLE_REGEX
-#include <onigposix.h>
-#endif
 
 #include <sys/queue.h>
 #include <event2/event.h>

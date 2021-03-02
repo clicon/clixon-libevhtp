@@ -6,7 +6,6 @@ extern "C" {
 #endif
 
 #include <stdint.h>
-#include "evhtp/config.h"
 
 /**
  * @brief based on the system architecture, convert a size_t
