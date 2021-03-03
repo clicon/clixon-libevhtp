@@ -99,7 +99,7 @@ clean:
 distclean: clean
 	rm -f Makefile *~ .depend
 
-install: $(MYLIB) include/evhtp.h include/evhtp/evhtp.h include/evhtp/parser.h include/evhtp/sslutils.h include/evhtp/config.h
+install: $(MYLIB) include/evhtp.h include/evhtp/evhtp.h include/evhtp/parser.h include/evhtp/sslutils.h include/evhtp/config.h include/evhtp/queue.h
 	install -d -m 0755 $(DESTDIR)$(libdir)
 	install -m 0644 $(INSTALLFLAGS) $(MYLIB) $(DESTDIR)$(libdir)
 ifeq ($(LINKAGE),dynamic)
@@ -112,6 +112,7 @@ endif
 	install -m 0644 include/evhtp/parser.h $(DESTDIR)$(includedir)/evhtp
 	install -m 0644 include/evhtp/sslutils.h $(DESTDIR)$(includedir)/evhtp
 	install -m 0644 include/evhtp/config.h $(DESTDIR)$(includedir)/evhtp
+	install -m 0644 include/evhtp/queue.h $(DESTDIR)$(includedir)/evhtp
 
 uninstall:
 	rm -f $(DESTDIR)$(libdir)/$(MYLIBLINK)*
