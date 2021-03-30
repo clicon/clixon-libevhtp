@@ -34,7 +34,7 @@
 # in the directory containing this script.
 #
 
-AC_INIT(config.h.in)
+AC_INIT(libevhtp-config.h.in)
 
 # Default CFLAGS and INSTALLFLAGS unless set by environment
 : ${CFLAGS="-O2 -Wall"}
@@ -54,7 +54,7 @@ else
 	CLIGEN_PREFIX="$prefix"
 fi
 
-AC_CONFIG_HEADERS([config.h])
+AC_CONFIG_HEADERS([libevhtp-config.h])
 
 # AC_SUBST(var) makes @var@ appear in makefiles.
 AC_SUBST(LIB_VERSION_MAJOR)
@@ -122,7 +122,7 @@ AC_CHECK_LIB(socket, socket)
 
 #AC_CHECK_FUNCS(inet_aton sigaction sigvec strlcpy strsep strndup)
 
-AH_BOTTOM([#include <custom.h>])
+AH_BOTTOM([#include <libevhtp-custom.h>])
 
 AC_OUTPUT(Makefile
 )

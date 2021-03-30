@@ -66,7 +66,7 @@ else
 	CPPFLAGS  	= @CPPFLAGS@
 endif
 
-CPPFLAGS += -DEVHTP_HAS_C99 -DEVHTP_HAS_SYS_TYPES -DEVHTP_DISABLE_REGEX -DEVHTP_DISABLE_EVTHR -DEVHTP_EXPORT=""
+#CPPFLAGS += 
 
 INCLUDES	= -I. -I$(top_srcdir)/lib -I$(top_srcdir)/include -I$(top_srcdir) @INCLUDES@
 
@@ -99,7 +99,7 @@ clean:
 distclean: clean
 	rm -f Makefile *~ .depend
 
-install: $(MYLIB) include/evhtp.h include/evhtp/evhtp.h include/evhtp/parser.h include/evhtp/sslutils.h include/evhtp/config.h include/evhtp/queue.h
+install: $(MYLIB) include/evhtp.h include/evhtp/evhtp.h include/evhtp/parser.h include/evhtp/sslutils.h include/evhtp/queue.h
 	install -d -m 0755 $(DESTDIR)$(libdir)
 	install -m 0644 $(INSTALLFLAGS) $(MYLIB) $(DESTDIR)$(libdir)
 ifeq ($(LINKAGE),dynamic)
@@ -107,11 +107,11 @@ ifeq ($(LINKAGE),dynamic)
 	ln -sf $(MYLIBSO) $(DESTDIR)$(libdir)/$(MYLIBLINK) # -l:libclixon_restconf.so
 endif
 	install -m 0644 include/evhtp.h $(DESTDIR)$(includedir)
+	install -d -m 0755 $(DESTDIR)$(includedir)
 	install -d -m 0755 $(DESTDIR)$(includedir)/evhtp
 	install -m 0644 include/evhtp/evhtp.h $(DESTDIR)$(includedir)/evhtp
 	install -m 0644 include/evhtp/parser.h $(DESTDIR)$(includedir)/evhtp
 	install -m 0644 include/evhtp/sslutils.h $(DESTDIR)$(includedir)/evhtp
-	install -m 0644 include/evhtp/config.h $(DESTDIR)$(includedir)/evhtp
 	install -m 0644 include/evhtp/queue.h $(DESTDIR)$(includedir)/evhtp
 
 uninstall:

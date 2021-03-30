@@ -2,8 +2,6 @@
  * @file evhtp.h
  */
 
-#include <evhtp/config.h>
-
 #ifndef __EVHTP__H__
 #define __EVHTP__H__
 
@@ -593,16 +591,6 @@ EVHTP_EXPORT int evhtp_ssl_use_threads(void);
 EVHTP_EXPORT int evhtp_ssl_init(evhtp_t * htp, evhtp_ssl_cfg_t * ssl_cfg);
 #endif
 
-
-/**
- * @brief when a client sends an Expect: 100-continue, if this is function is
- *        called, evhtp will not send a HTTP/x.x continue response.
- *
- * @param htp
- */
-EVHTP_EXPORT void evhtp_disable_100_continue(evhtp_t * htp)
-DEPRECATED("evhtp_disable_100 will soon be deprecated, use htp->flags instead");
-
 /**
  * @brief creates a lock around callbacks and hooks, allowing for threaded
  * applications to add/remove/modify hooks & callbacks in a thread-safe manner.
@@ -851,8 +839,6 @@ EVHTP_EXPORT int evhtp_bind_sockaddr(evhtp_t * htp, struct sockaddr *,
  *
  * @return
  */
-EVHTP_EXPORT int evhtp_use_threads(evhtp_t *, evhtp_thread_init_cb, int nthreads, void *)
-DEPRECATED("will take on the syntax of evhtp_use_threads_wexit");
 
 /**
  * @brief Temporary function which will be renamed evhtp_use_threads in the
@@ -870,7 +856,6 @@ EVHTP_EXPORT int evhtp_use_threads_wexit(evhtp_t *,
  * @param code HTTP return status code
  */
 EVHTP_EXPORT void evhtp_send_reply(evhtp_request_t * request, evhtp_res code);
-
 
 /* The following three functions allow for the user to do what evhtp_send_reply does at its core
  * but for the weak of heart.
@@ -1401,6 +1386,8 @@ EVHTP_EXPORT void evhtp_set_max_keepalive_requests(evhtp_t * htp, uint64_t num);
 * client request functions                                      *
 *****************************************************************/
 
+evhtp_connection_t *evhtp_connection_new_server(evhtp_t * htp, evutil_socket_t sock);
+    
 /**
  * @brief allocate a new connection
  */
@@ -1434,6 +1421,8 @@ EVHTP_EXPORT int evhtp_make_request(evhtp_connection_t * c,
     evhtp_request_t * r, htp_method meth, const char * uri);
 
 EVHTP_EXPORT unsigned int evhtp_request_status(evhtp_request_t *);
+
+int connection_parse_nobev(char *buf, size_t buflen, void *arg);
 
 #define evhtp_safe_free(_var, _freefn) do { \
         _freefn((_var));                    \
