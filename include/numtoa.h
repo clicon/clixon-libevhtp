@@ -14,7 +14,7 @@ extern "C" {
  *
  * @return
  */
-EVHTP_EXPORT size_t evhtp_modp_sizetoa(size_t value, char * str);
+size_t evhtp_modp_sizetoa(size_t value, char * str);
 
 /**
  * @brief converts uint32_t value to string
@@ -24,7 +24,7 @@ EVHTP_EXPORT size_t evhtp_modp_sizetoa(size_t value, char * str);
  *
  * @return
  */
-EVHTP_EXPORT size_t evhtp_modp_u32toa(uint32_t value, char * str);
+size_t evhtp_modp_u32toa(uint32_t value, char * str);
 
 
 /**
@@ -35,7 +35,7 @@ EVHTP_EXPORT size_t evhtp_modp_u32toa(uint32_t value, char * str);
  *
  * @return
  */
-EVHTP_EXPORT size_t evhtp_modp_u64toa(uint64_t value, char * str);
+size_t evhtp_modp_u64toa(uint64_t value, char * str);
 
 #define evhtp_modp_uchartoa(_val) (unsigned char)('0' + _val)
 
