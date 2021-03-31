@@ -23,6 +23,13 @@
 #include <openssl/rand.h>
 #endif
 
+/* Really in libevhtp-custom.h 
+ * but this to make autotools work
+ */
+#ifdef HAVE_CONFIG_H
+#define EVHTP_DISABLE_EVTHR
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -517,7 +524,7 @@ struct evhtp_ssl_cfg {
 #endif
 
 
-EVHTP_EXPORT void evhtp_set_mem_functions(void *(*malloc_)(size_t),
+void evhtp_set_mem_functions(void *(*malloc_)(size_t),
     void *(*realloc_)(void *, size_t),
     void (* free_)(void *));
 
@@ -529,17 +536,17 @@ EVHTP_EXPORT void evhtp_set_mem_functions(void *(*malloc_)(size_t),
  *
  * @return a new evhtp_t structure or NULL on error
  */
-EVHTP_EXPORT evhtp_t * evhtp_new(struct event_base * evbase, void * arg);
+evhtp_t * evhtp_new(struct event_base * evbase, void * arg);
 
-EVHTP_EXPORT void evhtp_enable_flag(evhtp_t *, int);
-EVHTP_EXPORT void evhtp_connection_enable_flag(evhtp_connection_t *, int);
-EVHTP_EXPORT void evhtp_request_enable_flag(evhtp_request_t *, int);
-EVHTP_EXPORT int  evhtp_get_flags(evhtp_t *);
-EVHTP_EXPORT int  evhtp_connection_get_flags(evhtp_connection_t *);
-EVHTP_EXPORT int  evhtp_request_get_flags(evhtp_request_t *);
-EVHTP_EXPORT void evhtp_disable_flag(evhtp_t *, int);
-EVHTP_EXPORT void evhtp_connection_disable_flag(evhtp_connection_t *, int);
-EVHTP_EXPORT void evhtp_request_disable_flag(evhtp_request_t *, int);
+void evhtp_enable_flag(evhtp_t *, int);
+void evhtp_connection_enable_flag(evhtp_connection_t *, int);
+void evhtp_request_enable_flag(evhtp_request_t *, int);
+int  evhtp_get_flags(evhtp_t *);
+int  evhtp_connection_get_flags(evhtp_connection_t *);
+int  evhtp_request_get_flags(evhtp_request_t *);
+void evhtp_disable_flag(evhtp_t *, int);
+void evhtp_connection_disable_flag(evhtp_connection_t *, int);
+void evhtp_request_disable_flag(evhtp_request_t *, int);
 
 /**
  * @brief Frees evhtp_t structure; will stop and free threads associated
@@ -548,7 +555,7 @@ EVHTP_EXPORT void evhtp_request_disable_flag(evhtp_request_t *, int);
  * @param evhtp - ptr to evhtp_t structure
  *
  */
-EVHTP_EXPORT void evhtp_free(evhtp_t * evhtp);
+void evhtp_free(evhtp_t * evhtp);
 
 /**
  * @brief set a read/write timeout on all things evhtp_t. When the timeout
@@ -559,7 +566,7 @@ EVHTP_EXPORT void evhtp_free(evhtp_t * evhtp);
  * @param r read-timeout in timeval
  * @param w write-timeout in timeval.
  */
-EVHTP_EXPORT void evhtp_set_timeouts(evhtp_t * htp, const struct timeval * r, const struct timeval * w);
+void evhtp_set_timeouts(evhtp_t * htp, const struct timeval * r, const struct timeval * w);
 
 
 
@@ -576,7 +583,7 @@ EVHTP_EXPORT void evhtp_set_timeouts(evhtp_t * htp, const struct timeval * r, co
  * @param htp
  * @param flags
  */
-EVHTP_EXPORT void evhtp_set_parser_flags(evhtp_t * htp, int flags);
+void evhtp_set_parser_flags(evhtp_t * htp, int flags);
 
 /**
  * @brief bufferevent flags which will be used for bev sockets.
@@ -584,11 +591,11 @@ EVHTP_EXPORT void evhtp_set_parser_flags(evhtp_t * htp, int flags);
  * @param htp
  * @param flags
  */
-EVHTP_EXPORT void evhtp_set_bev_flags(evhtp_t * htp, int flags);
+void evhtp_set_bev_flags(evhtp_t * htp, int flags);
 
 #ifndef EVHTP_DISABLE_SSL
-EVHTP_EXPORT int evhtp_ssl_use_threads(void);
-EVHTP_EXPORT int evhtp_ssl_init(evhtp_t * htp, evhtp_ssl_cfg_t * ssl_cfg);
+int evhtp_ssl_use_threads(void);
+int evhtp_ssl_init(evhtp_t * htp, evhtp_ssl_cfg_t * ssl_cfg);
 #endif
 
 /**
@@ -599,7 +606,7 @@ EVHTP_EXPORT int evhtp_ssl_init(evhtp_t * htp, evhtp_ssl_cfg_t * ssl_cfg);
  *
  * @return 0 on success, -1 on error
  */
-EVHTP_EXPORT int evhtp_use_callback_locks(evhtp_t * htp);
+int evhtp_use_callback_locks(evhtp_t * htp);
 
 /**
  * @brief sets a callback which is called if no other callbacks are matched
@@ -608,7 +615,7 @@ EVHTP_EXPORT int evhtp_use_callback_locks(evhtp_t * htp);
  * @param cb  the function to be executed
  * @param arg user-defined argument passed to the callback
  */
-EVHTP_EXPORT void evhtp_set_gencb(evhtp_t * htp, evhtp_callback_cb cb, void * arg);
+void evhtp_set_gencb(evhtp_t * htp, evhtp_callback_cb cb, void * arg);
 
 
 /**
@@ -620,7 +627,7 @@ EVHTP_EXPORT void evhtp_set_gencb(evhtp_t * htp, evhtp_callback_cb cb, void * ar
  *
  * @return
  */
-EVHTP_EXPORT void evhtp_set_pre_accept_cb(evhtp_t * htp, evhtp_pre_accept_cb, void * arg);
+void evhtp_set_pre_accept_cb(evhtp_t * htp, evhtp_pre_accept_cb, void * arg);
 
 
 /**
@@ -632,7 +639,7 @@ EVHTP_EXPORT void evhtp_set_pre_accept_cb(evhtp_t * htp, evhtp_pre_accept_cb, vo
  *
  * @return
  */
-EVHTP_EXPORT void evhtp_set_post_accept_cb(evhtp_t * htp, evhtp_post_accept_cb, void * arg);
+void evhtp_set_post_accept_cb(evhtp_t * htp, evhtp_post_accept_cb, void * arg);
 
 /**
  * @brief sets a callback to be executed on a specific path
@@ -644,7 +651,7 @@ EVHTP_EXPORT void evhtp_set_post_accept_cb(evhtp_t * htp, evhtp_post_accept_cb, 
  *
  * @return evhtp_callback_t * on success, NULL on error.
  */
-EVHTP_EXPORT evhtp_callback_t * evhtp_set_cb(evhtp_t * htp, const char * path,
+evhtp_callback_t * evhtp_set_cb(evhtp_t * htp, const char * path,
     evhtp_callback_cb cb, void * arg);
 
 
@@ -659,7 +666,7 @@ EVHTP_EXPORT evhtp_callback_t * evhtp_set_cb(evhtp_t * htp, const char * path,
  * @return evhtp_callback_t * on success, NULL on error
  */
 #ifndef EVHTP_DISABLE_REGEX
-EVHTP_EXPORT evhtp_callback_t * evhtp_set_regex_cb(evhtp_t * htp, const char * pattern,
+evhtp_callback_t * evhtp_set_regex_cb(evhtp_t * htp, const char * pattern,
     evhtp_callback_cb cb, void * arg);
 #endif
 
@@ -677,7 +684,7 @@ EVHTP_EXPORT evhtp_callback_t * evhtp_set_regex_cb(evhtp_t * htp, const char * p
  *
  * @return
  */
-EVHTP_EXPORT evhtp_callback_t * evhtp_set_glob_cb(evhtp_t * htp, const char * pattern,
+evhtp_callback_t * evhtp_set_glob_cb(evhtp_t * htp, const char * pattern,
     evhtp_callback_cb cb, void * arg);
 
 
@@ -706,7 +713,7 @@ EVHTP_EXPORT evhtp_callback_t * evhtp_set_glob_cb(evhtp_t * htp, const char * pa
  *
  * @return NULL if callback is not not found
  */
-EVHTP_EXPORT evhtp_callback_t * evhtp_get_cb(evhtp_t * htp, const char * needle);
+evhtp_callback_t * evhtp_get_cb(evhtp_t * htp, const char * needle);
 
 /**
  * @brief sets a callback hook for either a connection or a path/regex .
@@ -747,13 +754,13 @@ EVHTP_EXPORT evhtp_callback_t * evhtp_get_cb(evhtp_t * htp, const char * needle)
  *
  * @return 0 on success, -1 on error (if hooks is NULL, it is allocated)
  */
-EVHTP_EXPORT int evhtp_connection_set_hook(evhtp_connection_t * c, evhtp_hook_type type, evhtp_hook cb, void * arg);
-EVHTP_EXPORT int evhtp_request_set_hook(evhtp_request_t * r, evhtp_hook_type type, evhtp_hook cb, void * arg);
-EVHTP_EXPORT int evhtp_callback_set_hook(evhtp_callback_t * cb, evhtp_hook_type type, evhtp_hook hookcb, void * arg);
+int evhtp_connection_set_hook(evhtp_connection_t * c, evhtp_hook_type type, evhtp_hook cb, void * arg);
+int evhtp_request_set_hook(evhtp_request_t * r, evhtp_hook_type type, evhtp_hook cb, void * arg);
+int evhtp_callback_set_hook(evhtp_callback_t * cb, evhtp_hook_type type, evhtp_hook hookcb, void * arg);
 
-EVHTP_EXPORT evhtp_hooks_t * evhtp_connection_get_hooks(evhtp_connection_t * c);
-EVHTP_EXPORT evhtp_hooks_t * evhtp_request_get_hooks(evhtp_request_t * r);
-EVHTP_EXPORT evhtp_hooks_t * evhtp_callback_get_hooks(evhtp_callback_t * cb);
+evhtp_hooks_t * evhtp_connection_get_hooks(evhtp_connection_t * c);
+evhtp_hooks_t * evhtp_request_get_hooks(evhtp_request_t * r);
+evhtp_hooks_t * evhtp_callback_get_hooks(evhtp_callback_t * cb);
 
 /**
  * @brief removes all hooks.
@@ -762,11 +769,11 @@ EVHTP_EXPORT evhtp_hooks_t * evhtp_callback_get_hooks(evhtp_callback_t * cb);
  *
  * @return
  */
-EVHTP_EXPORT int evhtp_unset_all_hooks(evhtp_hooks_t ** hooks);
+int evhtp_unset_all_hooks(evhtp_hooks_t ** hooks);
 
-EVHTP_EXPORT int evhtp_request_unset_hook(evhtp_request_t * req, evhtp_hook_type type);
-EVHTP_EXPORT int evhtp_connection_unset_hook(evhtp_connection_t * conn, evhtp_hook_type type);
-EVHTP_EXPORT int evhtp_callback_unset_hook(evhtp_callback_t * callback, evhtp_hook_type type);
+int evhtp_request_unset_hook(evhtp_request_t * req, evhtp_hook_type type);
+int evhtp_connection_unset_hook(evhtp_connection_t * conn, evhtp_hook_type type);
+int evhtp_callback_unset_hook(evhtp_callback_t * callback, evhtp_hook_type type);
 
 
 /**
@@ -784,7 +791,7 @@ EVHTP_EXPORT int evhtp_callback_unset_hook(evhtp_callback_t * callback, evhtp_ho
  *
  * @return
  */
-EVHTP_EXPORT int evhtp_bind_socket(evhtp_t * htp, const char * addr, uint16_t port, int backlog);
+int evhtp_bind_socket(evhtp_t * htp, const char * addr, uint16_t port, int backlog);
 
 
 /**
@@ -792,7 +799,7 @@ EVHTP_EXPORT int evhtp_bind_socket(evhtp_t * htp, const char * addr, uint16_t po
  *
  * @param htp
  */
-EVHTP_EXPORT void evhtp_unbind_socket(evhtp_t * htp);
+void evhtp_unbind_socket(evhtp_t * htp);
 
 
 /**
@@ -808,7 +815,7 @@ EVHTP_EXPORT void evhtp_unbind_socket(evhtp_t * htp);
  *
  * @return 0 on success, -1 on error (check errno)
  */
-EVHTP_EXPORT int evhtp_accept_socket(evhtp_t * htp, evutil_socket_t sock, int backlog);
+int evhtp_accept_socket(evhtp_t * htp, evutil_socket_t sock, int backlog);
 
 /**
  * @brief bind to an already allocated sockaddr.
@@ -821,7 +828,7 @@ EVHTP_EXPORT int evhtp_accept_socket(evhtp_t * htp, evutil_socket_t sock, int ba
  *
  * @return 0 on success, -1 on fail
  */
-EVHTP_EXPORT int evhtp_bind_sockaddr(evhtp_t * htp, struct sockaddr *,
+int evhtp_bind_sockaddr(evhtp_t * htp, struct sockaddr *,
     size_t sin_len, int backlog);
 
 
@@ -844,7 +851,7 @@ EVHTP_EXPORT int evhtp_bind_sockaddr(evhtp_t * htp, struct sockaddr *,
  * @brief Temporary function which will be renamed evhtp_use_threads in the
  *        future. evhtp_use_threads() has been noted as deprecated for now
  */
-EVHTP_EXPORT int evhtp_use_threads_wexit(evhtp_t *,
+int evhtp_use_threads_wexit(evhtp_t *,
     evhtp_thread_init_cb,
     evhtp_thread_exit_cb,
     int nthreads, void * arg);
@@ -855,14 +862,14 @@ EVHTP_EXPORT int evhtp_use_threads_wexit(evhtp_t *,
  * @param request
  * @param code HTTP return status code
  */
-EVHTP_EXPORT void evhtp_send_reply(evhtp_request_t * request, evhtp_res code);
+void evhtp_send_reply(evhtp_request_t * request, evhtp_res code);
 
 /* The following three functions allow for the user to do what evhtp_send_reply does at its core
  * but for the weak of heart.
  */
-EVHTP_EXPORT void evhtp_send_reply_start(evhtp_request_t * request, evhtp_res code);
-EVHTP_EXPORT void evhtp_send_reply_body(evhtp_request_t * request, struct evbuffer * buf);
-EVHTP_EXPORT void evhtp_send_reply_end(evhtp_request_t * request);
+void evhtp_send_reply_start(evhtp_request_t * request, evhtp_res code);
+void evhtp_send_reply_body(evhtp_request_t * request, struct evbuffer * buf);
+void evhtp_send_reply_end(evhtp_request_t * request);
 
 /**
  * @brief Determine if a response should have a body.
@@ -870,7 +877,7 @@ EVHTP_EXPORT void evhtp_send_reply_end(evhtp_request_t * request);
  * @return 1 if the response MUST have a body; 0 if the response MUST NOT have
  *     a body.
  */
-EVHTP_EXPORT int evhtp_response_needs_body(const evhtp_res code, const htp_method method);
+int evhtp_response_needs_body(const evhtp_res code, const htp_method method);
 
 /**
  * @brief start a chunked response. If data already exists on the output buffer,
@@ -879,7 +886,7 @@ EVHTP_EXPORT int evhtp_response_needs_body(const evhtp_res code, const htp_metho
  * @param request
  * @param code
  */
-EVHTP_EXPORT void evhtp_send_reply_chunk_start(evhtp_request_t * request, evhtp_res code);
+void evhtp_send_reply_chunk_start(evhtp_request_t * request, evhtp_res code);
 
 
 /**
@@ -888,7 +895,7 @@ EVHTP_EXPORT void evhtp_send_reply_chunk_start(evhtp_request_t * request, evhtp_
  * @param request
  * @param buf
  */
-EVHTP_EXPORT void evhtp_send_reply_chunk(evhtp_request_t * request, struct evbuffer * buf);
+void evhtp_send_reply_chunk(evhtp_request_t * request, struct evbuffer * buf);
 
 /**
  * @brief call when all chunks have been sent and you wish to send the last
@@ -896,7 +903,7 @@ EVHTP_EXPORT void evhtp_send_reply_chunk(evhtp_request_t * request, struct evbuf
  *
  * @param request
  */
-EVHTP_EXPORT void evhtp_send_reply_chunk_end(evhtp_request_t * request);
+void evhtp_send_reply_chunk_end(evhtp_request_t * request);
 
 /**
  * @brief creates a new evhtp_callback_t structure.
@@ -917,7 +924,7 @@ EVHTP_EXPORT void evhtp_send_reply_chunk_end(evhtp_request_t * request);
  *
  * @return 0 on success, -1 on error.
  */
-EVHTP_EXPORT evhtp_callback_t *
+evhtp_callback_t *
 evhtp_callback_new(const char * path, evhtp_callback_type type, evhtp_callback_cb cb, void * arg);
 
 /**
@@ -929,7 +936,7 @@ evhtp_callback_new(const char * path, evhtp_callback_type type, evhtp_callback_c
  * @param callback - callback to be freed
  *
  */
-EVHTP_EXPORT void evhtp_callback_free(evhtp_callback_t * callback);
+void evhtp_callback_free(evhtp_callback_t * callback);
 
 
 /**
@@ -940,7 +947,7 @@ EVHTP_EXPORT void evhtp_callback_free(evhtp_callback_t * callback);
  *
  * @return 0 on success, -1 on error
  */
-EVHTP_EXPORT int evhtp_callbacks_add_callback(evhtp_callbacks_t * cbs, evhtp_callback_t * cb);
+int evhtp_callbacks_add_callback(evhtp_callbacks_t * cbs, evhtp_callback_t * cb);
 
 
 /**
@@ -955,7 +962,7 @@ EVHTP_EXPORT int evhtp_callbacks_add_callback(evhtp_callbacks_t * cbs, evhtp_cal
  *
  * @return
  */
-EVHTP_EXPORT int evhtp_add_vhost(evhtp_t * evhtp, const char * name, evhtp_t * vhost);
+int evhtp_add_vhost(evhtp_t * evhtp, const char * name, evhtp_t * vhost);
 
 
 /**
@@ -968,7 +975,7 @@ EVHTP_EXPORT int evhtp_add_vhost(evhtp_t * evhtp, const char * name, evhtp_t * v
  *
  * @return
  */
-EVHTP_EXPORT int evhtp_add_alias(evhtp_t * evhtp, const char * name);
+int evhtp_add_alias(evhtp_t * evhtp, const char * name);
 
 
 /**
@@ -982,7 +989,7 @@ EVHTP_EXPORT int evhtp_add_alias(evhtp_t * evhtp, const char * name);
  *
  * @return 0 on success, -1 on error
  */
-EVHTP_EXPORT int evhtp_add_aliases(evhtp_t * evhtp, const char * name, ...);
+int evhtp_add_aliases(evhtp_t * evhtp, const char * name, ...);
 
 /**
  * @brief Allocates a new key/value structure.
@@ -994,7 +1001,7 @@ EVHTP_EXPORT int evhtp_add_aliases(evhtp_t * evhtp, const char * name, ...);
  *
  * @return evhtp_kv_t * on success, NULL on error.
  */
-EVHTP_EXPORT evhtp_kv_t * evhtp_kv_new(const char * key, const char * val, char kalloc, char valloc);
+evhtp_kv_t * evhtp_kv_new(const char * key, const char * val, char kalloc, char valloc);
 
 
 /**
@@ -1002,7 +1009,7 @@ EVHTP_EXPORT evhtp_kv_t * evhtp_kv_new(const char * key, const char * val, char 
  *
  * @return
  */
-EVHTP_EXPORT evhtp_kvs_t * evhtp_kvs_new(void);
+evhtp_kvs_t * evhtp_kvs_new(void);
 
 
 /**
@@ -1010,7 +1017,7 @@ EVHTP_EXPORT evhtp_kvs_t * evhtp_kvs_new(void);
  *
  * @param kv
  */
-EVHTP_EXPORT void evhtp_kv_free(evhtp_kv_t * kv);
+void evhtp_kv_free(evhtp_kv_t * kv);
 
 
 /**
@@ -1018,7 +1025,7 @@ EVHTP_EXPORT void evhtp_kv_free(evhtp_kv_t * kv);
  *
  * @param kvs
  */
-EVHTP_EXPORT void evhtp_kvs_free(evhtp_kvs_t * kvs);
+void evhtp_kvs_free(evhtp_kvs_t * kvs);
 
 /**
  * @brief free's resources associated with 'kv' if ONLY found within the key/value list
@@ -1026,7 +1033,7 @@ EVHTP_EXPORT void evhtp_kvs_free(evhtp_kvs_t * kvs);
  * @param kvs
  * @param kv
  */
-EVHTP_EXPORT void evhtp_kv_rm_and_free(evhtp_kvs_t * kvs, evhtp_kv_t * kv);
+void evhtp_kv_rm_and_free(evhtp_kvs_t * kvs, evhtp_kv_t * kv);
 
 /**
  * @brief find the string value of 'key' from the key/value list 'kvs'
@@ -1036,7 +1043,7 @@ EVHTP_EXPORT void evhtp_kv_rm_and_free(evhtp_kvs_t * kvs, evhtp_kv_t * kv);
  *
  * @return NULL if not found
  */
-EVHTP_EXPORT const char * evhtp_kv_find(evhtp_kvs_t * kvs, const char * key);
+const char * evhtp_kv_find(evhtp_kvs_t * kvs, const char * key);
 
 
 /**
@@ -1047,7 +1054,7 @@ EVHTP_EXPORT const char * evhtp_kv_find(evhtp_kvs_t * kvs, const char * key);
  *
  * @return
  */
-EVHTP_EXPORT evhtp_kv_t * evhtp_kvs_find_kv(evhtp_kvs_t * kvs, const char * key);
+evhtp_kv_t * evhtp_kvs_find_kv(evhtp_kvs_t * kvs, const char * key);
 
 
 /**
@@ -1056,7 +1063,7 @@ EVHTP_EXPORT evhtp_kv_t * evhtp_kvs_find_kv(evhtp_kvs_t * kvs, const char * key)
  * @param kvs an evhtp_kvs_t structure
  * @param kv  an evhtp_kv_t structure
  */
-EVHTP_EXPORT void evhtp_kvs_add_kv(evhtp_kvs_t * kvs, evhtp_kv_t * kv);
+void evhtp_kvs_add_kv(evhtp_kvs_t * kvs, evhtp_kv_t * kv);
 
 /**
  * @brief appends all key/val structures from src tailq onto dst tailq
@@ -1064,7 +1071,7 @@ EVHTP_EXPORT void evhtp_kvs_add_kv(evhtp_kvs_t * kvs, evhtp_kv_t * kv);
  * @param dst an evhtp_kvs_t structure
  * @param src an evhtp_kvs_t structure
  */
-EVHTP_EXPORT void evhtp_kvs_add_kvs(evhtp_kvs_t * dst, evhtp_kvs_t * src);
+void evhtp_kvs_add_kvs(evhtp_kvs_t * dst, evhtp_kvs_t * src);
 
 
 /**
@@ -1076,7 +1083,7 @@ EVHTP_EXPORT void evhtp_kvs_add_kvs(evhtp_kvs_t * dst, evhtp_kvs_t * src);
  *
  * @return
  */
-EVHTP_EXPORT int evhtp_kvs_for_each(evhtp_kvs_t * kvs, evhtp_kvs_iterator cb, void * arg);
+int evhtp_kvs_for_each(evhtp_kvs_t * kvs, evhtp_kvs_iterator cb, void * arg);
 
 #define EVHTP_PARSE_QUERY_FLAG_STRICT                 0
 #define EVHTP_PARSE_QUERY_FLAG_IGNORE_HEX             (1 << 0)
@@ -1103,7 +1110,7 @@ EVHTP_EXPORT int evhtp_kvs_for_each(evhtp_kvs_t * kvs, evhtp_kvs_iterator cb, vo
  *
  * @return evhtp_query_t * on success, NULL on error
  */
-EVHTP_EXPORT evhtp_query_t * evhtp_parse_query_wflags(const char * query, size_t len, int flags);
+evhtp_query_t * evhtp_parse_query_wflags(const char * query, size_t len, int flags);
 
 /**
  * @brief Parses the query portion of the uri into a set of key/values in a
@@ -1116,7 +1123,7 @@ EVHTP_EXPORT evhtp_query_t * evhtp_parse_query_wflags(const char * query, size_t
  *
  * @return evhtp_query_t * on success, NULL on error
  */
-EVHTP_EXPORT evhtp_query_t * evhtp_parse_query(const char * query, size_t len);
+evhtp_query_t * evhtp_parse_query(const char * query, size_t len);
 
 /**
  * @brief Unescapes strings like '%7B1,%202,%203%7D' would become '{1, 2, 3}'
@@ -1127,7 +1134,7 @@ EVHTP_EXPORT evhtp_query_t * evhtp_parse_query(const char * query, size_t len);
  *
  * @return 0 on success, -1 on error
  */
-EVHTP_EXPORT int evhtp_unescape_string(unsigned char ** out, unsigned char * str, size_t str_len);
+int evhtp_unescape_string(unsigned char ** out, unsigned char * str, size_t str_len);
 
 /**
  * @brief creates a new evhtp_header_t key/val structure
@@ -1139,7 +1146,7 @@ EVHTP_EXPORT int evhtp_unescape_string(unsigned char ** out, unsigned char * str
  *
  * @return evhtp_header_t * or NULL on error
  */
-EVHTP_EXPORT evhtp_header_t * evhtp_header_new(const char * key, const char * val,
+evhtp_header_t * evhtp_header_new(const char * key, const char * val,
     char kalloc, char valloc);
 
 /**
@@ -1152,7 +1159,7 @@ EVHTP_EXPORT evhtp_header_t * evhtp_header_new(const char * key, const char * va
  *
  * @return an evhtp_header_t pointer or NULL on error
  */
-EVHTP_EXPORT evhtp_header_t * evhtp_header_key_add(evhtp_headers_t * headers,
+evhtp_header_t * evhtp_header_key_add(evhtp_headers_t * headers,
     const char * key, char kalloc);
 
 
@@ -1165,7 +1172,7 @@ EVHTP_EXPORT evhtp_header_t * evhtp_header_key_add(evhtp_headers_t * headers,
  *
  * @return an evhtp_header_t pointer or NULL on error
  */
-EVHTP_EXPORT evhtp_header_t * evhtp_header_val_add(evhtp_headers_t * headers,
+evhtp_header_t * evhtp_header_val_add(evhtp_headers_t * headers,
     const char * val, char valloc);
 
 
@@ -1175,7 +1182,7 @@ EVHTP_EXPORT evhtp_header_t * evhtp_header_val_add(evhtp_headers_t * headers,
  * @param headers
  * @param header
  */
-EVHTP_EXPORT void evhtp_headers_add_header(evhtp_headers_t * headers, evhtp_header_t * header);
+void evhtp_headers_add_header(evhtp_headers_t * headers, evhtp_header_t * header);
 
 /**
  * @brief finds the value of a key in a evhtp_headers_t structure
@@ -1185,7 +1192,7 @@ EVHTP_EXPORT void evhtp_headers_add_header(evhtp_headers_t * headers, evhtp_head
  *
  * @return the value of the header key if found, NULL if not found.
  */
-EVHTP_EXPORT const char * evhtp_header_find(evhtp_headers_t * headers, const char * key);
+const char * evhtp_header_find(evhtp_headers_t * headers, const char * key);
 
 #define evhtp_headers_find_header evhtp_kvs_find_kv
 #define evhtp_headers_for_each    evhtp_kvs_for_each
@@ -1205,8 +1212,8 @@ EVHTP_EXPORT const char * evhtp_header_find(evhtp_headers_t * headers, const cha
  *
  * @return htp_method enum
  */
-EVHTP_EXPORT htp_method  evhtp_request_get_method(evhtp_request_t * r);
-EVHTP_EXPORT evhtp_proto evhtp_request_get_proto(evhtp_request_t * r);
+htp_method  evhtp_request_get_method(evhtp_request_t * r);
+evhtp_proto evhtp_request_get_proto(evhtp_request_t * r);
 
 
 /**
@@ -1216,7 +1223,7 @@ EVHTP_EXPORT evhtp_proto evhtp_request_get_proto(evhtp_request_t * r);
  *
  * @return the HTTP status code or related error.
  */
-EVHTP_EXPORT evhtp_res evhtp_request_get_status_code(evhtp_request_t * r);
+evhtp_res evhtp_request_get_status_code(evhtp_request_t * r);
 
 
 /**
@@ -1227,7 +1234,7 @@ EVHTP_EXPORT evhtp_res evhtp_request_get_status_code(evhtp_request_t * r);
  *
  * @return NULL on error
  */
-EVHTP_EXPORT const char * evhtp_request_get_status_code_str(evhtp_request_t * r);
+const char * evhtp_request_get_status_code_str(evhtp_request_t * r);
 
 /* the following functions all do the same thing, pause and the processing */
 
@@ -1236,14 +1243,14 @@ EVHTP_EXPORT const char * evhtp_request_get_status_code_str(evhtp_request_t * r)
  *
  * @param c a evhtp_connection_t * structure
  */
-EVHTP_EXPORT void evhtp_connection_pause(evhtp_connection_t * connection);
+void evhtp_connection_pause(evhtp_connection_t * connection);
 
 /**
  * @brief resumes a connection (enables reading) and activates resume event.
  *
  * @param c
  */
-EVHTP_EXPORT void evhtp_connection_resume(evhtp_connection_t * connection);
+void evhtp_connection_resume(evhtp_connection_t * connection);
 
 /**
  * @brief Wrapper around evhtp_connection_pause
@@ -1252,7 +1259,7 @@ EVHTP_EXPORT void evhtp_connection_resume(evhtp_connection_t * connection);
  *
  * @param request
  */
-EVHTP_EXPORT void evhtp_request_pause(evhtp_request_t * request);
+void evhtp_request_pause(evhtp_request_t * request);
 
 /**
  * @brief Wrapper around evhtp_connection_resume
@@ -1261,7 +1268,7 @@ EVHTP_EXPORT void evhtp_request_pause(evhtp_request_t * request);
  *
  * @param request
  */
-EVHTP_EXPORT void evhtp_request_resume(evhtp_request_t * request);
+void evhtp_request_resume(evhtp_request_t * request);
 
 
 /**
@@ -1271,7 +1278,7 @@ EVHTP_EXPORT void evhtp_request_resume(evhtp_request_t * request);
  *
  * @return evhtp_connection_t on success, otherwise NULL
  */
-EVHTP_EXPORT evhtp_connection_t * evhtp_request_get_connection(evhtp_request_t * request);
+evhtp_connection_t * evhtp_request_get_connection(evhtp_request_t * request);
 
 /**
  * @brief Sets the connections underlying bufferevent
@@ -1279,7 +1286,7 @@ EVHTP_EXPORT evhtp_connection_t * evhtp_request_get_connection(evhtp_request_t *
  * @param conn
  * @param bev
  */
-EVHTP_EXPORT void evhtp_connection_set_bev(evhtp_connection_t * conn, struct bufferevent * bev);
+void evhtp_connection_set_bev(evhtp_connection_t * conn, struct bufferevent * bev);
 
 /**
  * @brief sets the underlying bufferevent for a evhtp_request
@@ -1287,7 +1294,7 @@ EVHTP_EXPORT void evhtp_connection_set_bev(evhtp_connection_t * conn, struct buf
  * @param request
  * @param bev
  */
-EVHTP_EXPORT void evhtp_request_set_bev(evhtp_request_t * request, struct bufferevent * bev);
+void evhtp_request_set_bev(evhtp_request_t * request, struct bufferevent * bev);
 
 
 /**
@@ -1297,7 +1304,7 @@ EVHTP_EXPORT void evhtp_request_set_bev(evhtp_request_t * request, struct buffer
  *
  * @return bufferevent on success, otherwise NULL
  */
-EVHTP_EXPORT struct bufferevent * evhtp_connection_get_bev(evhtp_connection_t * conn);
+struct bufferevent * evhtp_connection_get_bev(evhtp_connection_t * conn);
 
 /**
  * @brief sets a connection-specific read/write timeout which overrides the
@@ -1307,7 +1314,7 @@ EVHTP_EXPORT struct bufferevent * evhtp_connection_get_bev(evhtp_connection_t * 
  * @param r timeval for read
  * @param w timeval for write
  */
-EVHTP_EXPORT void
+void
 evhtp_connection_set_timeouts(evhtp_connection_t * conn,
     const struct timeval                         * r,
     const struct timeval                         * w);
@@ -1319,7 +1326,7 @@ evhtp_connection_set_timeouts(evhtp_connection_t * conn,
  *
  * @return bufferevent on success, otherwise NULL
  */
-EVHTP_EXPORT struct bufferevent * evhtp_request_get_bev(evhtp_request_t * request);
+struct bufferevent * evhtp_request_get_bev(evhtp_request_t * request);
 
 
 /**
@@ -1334,7 +1341,7 @@ EVHTP_EXPORT struct bufferevent * evhtp_request_get_bev(evhtp_request_t * reques
  *
  * @return underlying connections bufferevent.
  */
-EVHTP_EXPORT struct bufferevent * evhtp_connection_take_ownership(evhtp_connection_t * connection);
+struct bufferevent * evhtp_connection_take_ownership(evhtp_connection_t * connection);
 
 
 /**
@@ -1343,8 +1350,8 @@ EVHTP_EXPORT struct bufferevent * evhtp_connection_take_ownership(evhtp_connecti
  *
  * @param connection
  */
-EVHTP_EXPORT void evhtp_connection_free(evhtp_connection_t * connection);
-EVHTP_EXPORT void evhtp_request_free(evhtp_request_t * request);
+void evhtp_connection_free(evhtp_connection_t * connection);
+void evhtp_request_free(evhtp_request_t * request);
 
 /**
  * @brief set a max body size to accept for an incoming request, this will
@@ -1353,7 +1360,7 @@ EVHTP_EXPORT void evhtp_request_free(evhtp_request_t * request);
  * @param htp
  * @param len
  */
-EVHTP_EXPORT void evhtp_set_max_body_size(evhtp_t * htp, uint64_t len);
+void evhtp_set_max_body_size(evhtp_t * htp, uint64_t len);
 
 /**
  * @brief set a max body size for a specific connection, this will default to
@@ -1362,7 +1369,7 @@ EVHTP_EXPORT void evhtp_set_max_body_size(evhtp_t * htp, uint64_t len);
  * @param conn
  * @param len
  */
-EVHTP_EXPORT void evhtp_connection_set_max_body_size(evhtp_connection_t * conn, uint64_t len);
+void evhtp_connection_set_max_body_size(evhtp_connection_t * conn, uint64_t len);
 
 /**
  * @brief just calls evhtp_connection_set_max_body_size for the request.
@@ -1370,8 +1377,8 @@ EVHTP_EXPORT void evhtp_connection_set_max_body_size(evhtp_connection_t * conn, 
  * @param request
  * @param len
  */
-EVHTP_EXPORT void evhtp_request_set_max_body_size(evhtp_request_t * request, uint64_t len);
-EVHTP_EXPORT void evhtp_request_set_keepalive(evhtp_request_t * request, int val);
+void evhtp_request_set_max_body_size(evhtp_request_t * request, uint64_t len);
+void evhtp_request_set_keepalive(evhtp_request_t * request, int val);
 
 /**
  * @brief sets a maximum number of requests that a single connection can make.
@@ -1379,7 +1386,7 @@ EVHTP_EXPORT void evhtp_request_set_keepalive(evhtp_request_t * request, int val
  * @param htp
  * @param num
  */
-EVHTP_EXPORT void evhtp_set_max_keepalive_requests(evhtp_t * htp, uint64_t num);
+void evhtp_set_max_keepalive_requests(evhtp_t * htp, uint64_t num);
 
 
 /*****************************************************************
@@ -1391,7 +1398,7 @@ evhtp_connection_t *evhtp_connection_new_server(evhtp_t * htp, evutil_socket_t s
 /**
  * @brief allocate a new connection
  */
-EVHTP_EXPORT evhtp_connection_t * evhtp_connection_new_dns(
+evhtp_connection_t * evhtp_connection_new_dns(
     struct event_base * evbase,
     struct evdns_base * dns_base,
     const char * addr, uint16_t port);
@@ -1399,11 +1406,11 @@ EVHTP_EXPORT evhtp_connection_t * evhtp_connection_new_dns(
 /**
  * @brief allocate a new connection
  */
-EVHTP_EXPORT evhtp_connection_t *
+evhtp_connection_t *
 evhtp_connection_new(struct event_base * evbase, const char * addr, uint16_t port);
 
 #ifndef EVHTP_DISABLE_SSL
-EVHTP_EXPORT evhtp_connection_t * evhtp_connection_ssl_new(
+evhtp_connection_t * evhtp_connection_ssl_new(
     struct event_base * evbase,
     const char * addr, uint16_t port, evhtp_ssl_ctx_t * ctx);
 #endif
@@ -1412,15 +1419,15 @@ EVHTP_EXPORT evhtp_connection_t * evhtp_connection_ssl_new(
 /**
  * @brief allocate a new request
  */
-EVHTP_EXPORT evhtp_request_t * evhtp_request_new(evhtp_callback_cb cb, void * arg);
+evhtp_request_t * evhtp_request_new(evhtp_callback_cb cb, void * arg);
 
 /**
  * @brief make a client request
  */
-EVHTP_EXPORT int evhtp_make_request(evhtp_connection_t * c,
+int evhtp_make_request(evhtp_connection_t * c,
     evhtp_request_t * r, htp_method meth, const char * uri);
 
-EVHTP_EXPORT unsigned int evhtp_request_status(evhtp_request_t *);
+unsigned int evhtp_request_status(evhtp_request_t *);
 
 int connection_parse_nobev(char *buf, size_t buflen, void *arg);
 
