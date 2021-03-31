@@ -5,8 +5,6 @@
 extern "C" {
 #endif
 
-#include <stdint.h>
-
 /**
  * @brief based on the system architecture, convert a size_t
  *        number to a string.

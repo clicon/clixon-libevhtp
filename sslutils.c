@@ -9,9 +9,9 @@
 #include <errno.h>
 #include <assert.h>
 
+#include "internal.h"
 #include "evhtp/evhtp.h"
 #include "evhtp/sslutils.h"
-#include "internal.h"
 
 #if OPENSSL_VERSION_NUMBER < 0x10100000L
 #define X509_get0_notBefore(x) X509_get_notBefore(x)

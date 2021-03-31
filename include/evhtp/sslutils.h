@@ -5,7 +5,7 @@
 #ifndef __EVHTP_SSLUTILS_H__
 #define __EVHTP_SSLUTILS_H__
 
-#include <evhtp/config.h>
+//#include <evhtp/config.h>
 
 #ifdef __cplusplus
 extern "C" {

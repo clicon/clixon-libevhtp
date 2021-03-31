@@ -35,8 +35,8 @@
 #include <limits.h>
 #include <event2/dns.h>
 
-#include "numtoa.h"
 #include "internal.h"
+#include "numtoa.h"
 #include "evhtp/evhtp.h"
 
 /**

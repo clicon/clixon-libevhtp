@@ -3083,7 +3083,7 @@ fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: debug is $ac_enable_debug" >&5
 $as_echo "debug is $ac_enable_debug" >&6; }
 if test "$ac_enable_debug" = "yes"; then
-   CFLAGS="-g -Wall"
+   CFLAGS="-g -Wall -Werror"
    INSTALLFLAGS=""
 fi
 

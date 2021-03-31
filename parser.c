@@ -6,6 +6,7 @@
 #include <stddef.h>
 #include <ctype.h>
 #include <string.h>
+#include <stdint.h>
 
 #include <sys/types.h>
 #include "internal.h"
