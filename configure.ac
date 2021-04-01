@@ -64,6 +64,13 @@ AC_MSG_RESULT(LIB version is ${LIB_VERSION_MAJOR}.${LIB_VERSION_MINOR})
 
 AC_CANONICAL_TARGET
 
+case $host_os in
+    freebsd* )
+    # Need to look in /us7local/lib on some installed packages, eg libevent                       
+        LDFLAGS="$LDFLAGS -L/usr/local/lib"
+        ;;
+esac
+
 AC_SUBST(CC)
 AC_SUBST(CFLAGS)
 AC_SUBST(LDFLAGS)

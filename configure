@@ -2022,6 +2022,13 @@ test -n "$target_alias" &&
     NONENONEs,x,x, &&
   program_prefix=${target_alias}-
 
+case $host_os in
+    freebsd* )
+    # Need to look in /us7local/lib on some installed packages, eg libevent
+        LDFLAGS="$LDFLAGS -L/usr/local/lib"
+        ;;
+esac
+
 
 
 
