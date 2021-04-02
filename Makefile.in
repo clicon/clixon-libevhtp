@@ -60,13 +60,7 @@ LIB_MINOR       = @LIB_VERSION_MINOR@
 
 LIBS          = @LIBS@ 
 
-ifeq ($(LINKAGE),dynamic)
-	CPPFLAGS  	= @CPPFLAGS@ -fPIC
-else
-	CPPFLAGS  	= @CPPFLAGS@
-endif
-
-#CPPFLAGS += 
+CPPFLAGS  	= @CPPFLAGS@ -fPIC
 
 INCLUDES	= -I. -I$(top_srcdir)/lib -I$(top_srcdir)/include -I$(top_srcdir) @INCLUDES@
 
@@ -85,11 +79,7 @@ MYLIBSO         = lib$(LIBNAME)$(SH_SUFFIX).$(LIB_MAJOR)
 MYLIBLINK       = lib$(LIBNAME)$(SH_SUFFIX)
 MYLIBSTATIC     = lib$(LIBNAME).a
 
-ifeq ($(LINKAGE),dynamic)
-	MYLIB        = $(MYLIBDYNAMIC)
-else
-	MYLIB        = $(MYLIBSTATIC)
-endif
+MYLIB        = $(MYLIBDYNAMIC)
 
 all:	 $(MYLIB)
 
@@ -102,10 +92,8 @@ distclean: clean
 install: $(MYLIB) include/evhtp.h include/evhtp/evhtp.h include/evhtp/parser.h include/evhtp/sslutils.h include/evhtp/queue.h
 	install -d -m 0755 $(DESTDIR)$(libdir)
 	install -m 0644 $(INSTALLFLAGS) $(MYLIB) $(DESTDIR)$(libdir)
-ifeq ($(LINKAGE),dynamic)
 	ln -sf $(MYLIB) $(DESTDIR)$(libdir)/$(MYLIBSO)     # -l:libclixon_restconf.so.2
 	ln -sf $(MYLIBSO) $(DESTDIR)$(libdir)/$(MYLIBLINK) # -l:libclixon_restconf.so
-endif
 	install -m 0644 include/evhtp.h $(DESTDIR)$(includedir)
 	install -d -m 0755 $(DESTDIR)$(includedir)
 	install -d -m 0755 $(DESTDIR)$(includedir)/evhtp
@@ -126,11 +114,7 @@ uninstall:
 	$(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -c $<
 
 $(MYLIBDYNAMIC) : $(OBJ)
-ifeq ($(HOST_VENDOR),apple)
-	$(CC) $(LDFLAGS) -shared -undefined dynamic_lookup -o $@ $^ $(LIBS)
-else
-	$(CC) $(LDFLAGS) -shared -Wl,-soname,$(MYLIBSO) -o $@ $^ $(LIBS) -Wl,-soname=$(MYLIBSO)
-endif
+	$(CC) $(LDFLAGS) -shared -Wl,-soname,$(MYLIBSO) -o $@ $(OBJ) $(LIBS) -Wl,-soname=$(MYLIBSO)
 
 # link-name is needed for application linking, eg for clixon_cli and clixon_config
 $(MYLIBLINK) : $(MYLIB)

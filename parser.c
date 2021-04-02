@@ -393,36 +393,6 @@ str_to_uint64(char * str, size_t n, int * err)
     return value;
 }
 
-static inline ssize_t
-_str_to_ssize_t(char * str, size_t n)
-{
-    ssize_t value;
-
-    if (n == 0)
-    {
-        return -1;
-    }
-
-    for (value = 0; n--; str++)
-    {
-        if (*str < '0' || *str > '9')
-        {
-            return -1;
-        }
-
-        value = value * 10 + (*str - '0');
-
-#if 0
-        if (value > INTMAX_MAX)
-        {
-            return -1;
-        }
-#endif
-    }
-
-    return value;
-}
-
 htpparse_error
 htparser_get_error(htparser * p)
 {

@@ -66,8 +66,9 @@ AC_CANONICAL_TARGET
 
 case $host_os in
     freebsd* )
-    # Need to look in /us7local/lib on some installed packages, eg libevent                       
+        # Need to look in /usr/local/lib on some installed packages, eg libevent
         LDFLAGS="$LDFLAGS -L/usr/local/lib"
+	CPPFLAGS="$CPPFLAGS -I/usr/local/include"
         ;;
 esac
 
