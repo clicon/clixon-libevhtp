@@ -94,8 +94,8 @@ install: $(MYLIB) include/evhtp.h include/evhtp/evhtp.h include/evhtp/parser.h i
 	install -m 0644 $(INSTALLFLAGS) $(MYLIB) $(DESTDIR)$(libdir)
 	ln -sf $(MYLIB) $(DESTDIR)$(libdir)/$(MYLIBSO)     # -l:libclixon_restconf.so.2
 	ln -sf $(MYLIBSO) $(DESTDIR)$(libdir)/$(MYLIBLINK) # -l:libclixon_restconf.so
-	install -m 0644 include/evhtp.h $(DESTDIR)$(includedir)
 	install -d -m 0755 $(DESTDIR)$(includedir)
+	install -m 0644 include/evhtp.h $(DESTDIR)$(includedir)
 	install -d -m 0755 $(DESTDIR)$(includedir)/evhtp
 	install -m 0644 include/evhtp/evhtp.h $(DESTDIR)$(includedir)/evhtp
 	install -m 0644 include/evhtp/parser.h $(DESTDIR)$(includedir)/evhtp
