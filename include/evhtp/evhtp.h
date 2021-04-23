@@ -459,6 +459,7 @@ struct evhtp_connection {
 #ifdef EVHTP_FUTURE_USE
     TAILQ_HEAD(, evhtp_request) pending;           /**< client pending data */
 #endif
+    void                  * arg;         /**< user-defined connection specific arguments */
 };
 
 struct evhtp_hooks {
