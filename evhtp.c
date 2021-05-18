@@ -1797,6 +1797,7 @@ htp__request_parse_headers_(htparser * p)
 {
     evhtp_connection_t * c;
 
+    log_debug("%s", __FUNCTION__);
     if ((c = htparser_get_userdata(p)) == NULL) {
         return -1;
     }
@@ -1823,6 +1824,8 @@ htp__request_parse_headers_(htparser * p)
             return 0;
         }
 
+
+        log_debug("%s Add 100 Continue", __FUNCTION__);
         evbuffer_add_printf(bufferevent_get_output(c->bev),
             "HTTP/%c.%c 100 Continue\r\n\r\n",
             evhtp_modp_uchartoa(htparser_get_major(p)),
