@@ -1,6 +1,9 @@
-# Libevtp for clixon
+# Libevtp for clixon 5.1-5.5
 
 See [orig README](README.orig.md)
+
+Note that this lib is necessary for Clixon RESTCONF HTTP/1 versions 5.1-5.5.
+It is not needed in Clixon 5.6 (or later).
 
 Modified libevtp as follows:
 
